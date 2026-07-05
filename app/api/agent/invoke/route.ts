@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
 
   let receipt;
   try {
-    receipt = await publicClient.waitForTransactionReceipt({ hash: txHash, timeout: 30_000 });
+    receipt = await publicClient.waitForTransactionReceipt({ hash: txHash as `0x${string}`, timeout: 30_000 });
   } catch {
     return NextResponse.json({ error: "Could not verify transaction (timeout or invalid hash)" }, { status: 400 });
   }
