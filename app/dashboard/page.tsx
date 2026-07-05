@@ -7,7 +7,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit';
 import Link from 'next/link';
 import { SKILL_REGISTRY_ADDRESS, SKILL_REGISTRY_ABI } from '../contract';
 
-type SkillData = readonly [string, string, string, bigint, bigint];
+type SkillData = readonly [string, string, string, string, bigint, bigint];
 
 function SkillLoader({
   skillId,
@@ -68,8 +68,10 @@ export default function Dashboard() {
   let totalEarned = 0;
 
   for (const item of mySkills) {
-    totalInvocations = totalInvocations + Number(item.data[4]);
-    totalEarned = totalEarned + Number(item.data[4]) * Number(formatEther(item.data[3]));
+    const invokeCount = Number(item.data[5]);
+    const price = Number(formatEther(item.data[4]));
+    totalInvocations = totalInvocations + invokeCount;
+    totalEarned = totalEarned + invokeCount * price;
   }
 
   return (
@@ -144,9 +146,9 @@ export default function Dashboard() {
                       <p className="text-[#5a6355] text-xs truncate hidden md:block">{item.data[2]}</p>
                     </div>
                     <span className="text-[#7dd67a] font-mono text-sm">
-                      {formatEther(item.data[3])} <span className="text-[#5a6355]">RITUAL</span>
+                      {formatEther(item.data[4])} <span className="text-[#5a6355]">RITUAL</span>
                     </span>
-                    <span className="text-[#e8ece4] font-mono text-sm">{item.data[4].toString()}x</span>
+                    <span className="text-[#e8ece4] font-mono text-sm">{item.data[5].toString()}x</span>
                   </div>
                 ))}
               </div>

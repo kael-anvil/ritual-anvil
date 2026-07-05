@@ -6,7 +6,8 @@ contract SkillRegistry {
         address creator;
         string name;
         string description;
-        uint256 price; // in wei
+        string bodyCID; // IPFS CID pointing to the full skill instructions
+        uint256 price;
         uint256 invokeCount;
     }
 
@@ -15,11 +16,17 @@ contract SkillRegistry {
     event SkillPublished(uint256 indexed skillId, address indexed creator, string name, uint256 price);
     event SkillInvoked(uint256 indexed skillId, address indexed invoker, uint256 amountPaid);
 
-    function publishSkill(string calldata name, string calldata description, uint256 price) external {
+    function publishSkill(
+        string calldata name,
+        string calldata description,
+        string calldata bodyCID,
+        uint256 price
+    ) external {
         skills.push(Skill({
             creator: msg.sender,
             name: name,
             description: description,
+            bodyCID: bodyCID,
             price: price,
             invokeCount: 0
         }));
@@ -48,11 +55,12 @@ contract SkillRegistry {
         address creator,
         string memory name,
         string memory description,
+        string memory bodyCID,
         uint256 price,
         uint256 invokeCount
     ) {
         require(skillId < skills.length, "Skill does not exist");
         Skill storage skill = skills[skillId];
-        return (skill.creator, skill.name, skill.description, skill.price, skill.invokeCount);
+        return (skill.creator, skill.name, skill.description, skill.bodyCID, skill.price, skill.invokeCount);
     }
 }
